@@ -31,9 +31,11 @@ class AuthController extends Controller
         $user = User::create($data);
         
         if($user){
-            return redirect()->route('login')->with('success','Registration Successful. Please Login!');
+            session()->flash('success','Registration Successful. Please Login!');
+            return redirect()->route('login');
         }else{
-            return redirect()->back()->with('fail','Something went wrong, try again later!');   
+            session()->flash('fail','Something went wrong, try again later!');
+            return redirect()->back();
         }
     }
 
@@ -47,7 +49,8 @@ class AuthController extends Controller
         if(Auth::attempt($credentials)){
             return redirect()->route('dashboard');
         }else{
-            return redirect()->back()->with('fail','Incorrect Credentials, Please try again!');
+            session()->flash('fail','Incorrect Credentials, Please try again!');
+            return redirect()->back();
         }
     }
 
@@ -71,10 +74,32 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
         if($user){
-            Maill::to($user->email)->send(new \App\Mail\ForgotPasswordMail($user));
-            return redirect()->back()->with('success','Password reset link has been sent to your email address.');
+            Mail::to($user->email)->send(new \App\Mail\ForgotPasswordMail($user));
+            session()->flash('success','Password reset link has been sent to your email address.');
+            return redirect()->back();
         }else{
-            return redirect()->back()->with('fail','Email address not found.');
+            session()->flash('fail','Email address not found.');
+            return redirect()->back();
         }
     }
+
+    public function resetpassword(Request $request){
+        $request->validate([
+            'email'=>'required|email',
+            'password'=>'required|min:5|max:30',
+            'cpassword'=>'required|min:5|max:30|same:password'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if($user){
+            $user->password = bcrypt($request->password);
+            $user->save();
+            session()->flash('success','Password changed successfully. Please login!');
+            return redirect()->route('login');
+        }else{
+            session()->flash('fail','Something went wrong, try again later!');
+            return redirect()->back();
+        }
+    }
+
 }

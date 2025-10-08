@@ -42,6 +42,11 @@
         form .mb-3 a{
             text-decoration: none;
         }
+        .alert{
+            position: absolute;
+            top:10px;
+            width: 300px;
+        }
     </style>
 </head>
 <body>
@@ -54,6 +59,7 @@
     @endif
 
     <form action="{{ route('forgot.password') }}" method="post">
+        @csrf
        <div class="form-group">
         <h2 class="text-center mb4">Forgot Password</h2>
         <div class="mb-3">

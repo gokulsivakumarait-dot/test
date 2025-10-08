@@ -38,6 +38,12 @@
             font-weight: lighter;
             padding-left: 5px;
         }
+
+        .alert{
+            position: absolute;
+            top:10px;
+            width: 300px;
+        }
     </style>
 </head>
 <body>
@@ -50,6 +56,7 @@
     @endif
 
     <form action="{{ route('register') }}" method="post">
+        @csrf
        <div class="form-group">
         <h2 class="text-center mb4">Register</h2>
         <div class="mb-3">
