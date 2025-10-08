@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <title>Login</title>
+    <title>Forgot Password</title>
     <style>
         body{
             display:flex;
@@ -58,23 +58,24 @@
         
     @endif
 
-    <form action="{{ route('login') }}" method="post">
+    <form action="{{ route('reset.password') }}" method="post">
         @csrf
+        <input type="hidden" name="email" value="{{ $mail }}">
        <div class="form-group">
-        <h2 class="text-center mb4">Login</h2>
+        <h2 class="text-center mb4">Reset Password</h2>
         <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Email Address:</label>
-            <input type="email" class="p-1 w-4" style="border-radius: 10px" name="email" id="exampleFormControlInput1" placeholder="name@example.com" required>
+            <label for="exampleFormControlInput2" class="form-label">OTP:</label>
+            <input type="text" class="p-1 w-4" style="border-radius: 10px" name="otp" id="exampleFormControlInput2" placeholder="Enter OTP" required>
         </div>
-       <div class="mb-3">
-            <label for="exampleFormControlInput2" class="form-label">Password:</label>
-            <input type="password" class="p-1 w-4" style="border-radius: 10px" name="password" id="exampleFormControlInput2" placeholder="Enter Your Password" required>
+        <div class="mb-3">
+            <label for="exampleFormControlInput3" class="form-label">Password:</label>
+            <input type="password" class="p-1 w-4" style="border-radius: 10px" name="password" id="exampleFormControlInput3" placeholder="Enter Password" required>
         </div>
-        <div class="mb-3 d-flex justify-content-between">
-            <a href="{{ route('register') }}">Register</a>
-            <a href="{{ route('forgot.password') }}">Forgot Password?</a>
+        <div class="mb-3">
+            <label for="exampleFormControlInput4" class="form-label">Conform Password:</label>
+            <input type="password" class="p-1 w-4" style="border-radius: 10px" name="cpassword" id="exampleFormControlInput4" placeholder="Re-Enter Your Password" required>
         </div>
-        <button type="submit" class="btn btn-success">Login</button>
+        <button type="submit" class="btn btn-success">Change</button>
        </div>
     </form>
 

@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-
+use Psy\Readline\Hoa\_Protocol;
+use App\Models\OTP;
 class AuthController extends Controller
 {
     public function loginshow(){
@@ -55,7 +56,7 @@ class AuthController extends Controller
     }
 
     public function index(){
-        return view('dashboard');
+        return view('index');
     }
 
     public function logout(){
@@ -73,10 +74,16 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
+        $mail = $request->email;
         if($user){
-            Mail::to($user->email)->send(new \App\Mail\ForgotPasswordMail($user));
-            session()->flash('success','Password reset link has been sent to your email address.');
-            return redirect()->back();
+            $otp = rand(100000,999999);
+            Otp::create([
+                'uid' => $user->id,
+                'email' => $user->email,
+                'otp' => $otp
+            ]);
+            session()->flash('success','OTP has been sended.');
+            return view('resetpassword',compact('mail'));
         }else{
             session()->flash('fail','Email address not found.');
             return redirect()->back();
@@ -85,15 +92,18 @@ class AuthController extends Controller
 
     public function resetpassword(Request $request){
         $request->validate([
-            'email'=>'required|email',
+            'otp' => 'required',
+            'email' => 'required|email', 
             'password'=>'required|min:5|max:30',
             'cpassword'=>'required|min:5|max:30|same:password'
         ]);
 
         $user = User::where('email', $request->email)->first();
-        if($user){
+        $otpRecord = OTP::where('uid', $user->id)->latest()->first();
+       if($otpRecord && $request->otp == $otpRecord->otp){
             $user->password = bcrypt($request->password);
             $user->save();
+            $otpRecord->delete();
             session()->flash('success','Password changed successfully. Please login!');
             return redirect()->route('login');
         }else{

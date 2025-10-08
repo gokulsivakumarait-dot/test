@@ -18,7 +18,7 @@ Route::controller(AuthController::class)->group(function(){
     Route::get('/', 'loginshow');
     Route::get('login', 'loginshow');
     Route::get('register', 'registershow');
-    Route::get('dashboard','index');
+    Route::get('dashboard','index')->name('dashboard');
     Route::get('forgot-password', 'forgotpasswordshow')->name('forgot.password');
 
     Route::post('register', 'register')->name('register');

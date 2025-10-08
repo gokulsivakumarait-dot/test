@@ -9,7 +9,7 @@
     
     <h2>Reset Your Password</h2>
     <p>Click the link below to reset your password:</p>
-    <a href="{{ url('reset-password/'.$token) }}">Reset Password</a>
+    <a href="{{ url('reset-password/') }}">Reset Password</a>
 
 </body>
 </html>

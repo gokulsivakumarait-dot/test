@@ -28,6 +28,6 @@ class ForgotPasswordMail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.forgotpassword');
+        return $this->view('email.forgotpassword');
     }
 }
